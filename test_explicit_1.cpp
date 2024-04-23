@@ -11,11 +11,19 @@ public:
 	}
 };
 
+UserId operator ""_uid(unsigned long long x){
+	return UserId(x);
+}
+
+UserId operator ""_uid(const char* x){
+	return UserId(0);
+}
+
 struct GroupId{
 private:
         int id = 0;
 public:
-        UserId(int id): id(id) {}
+        GroupId(int id): id(id) {}
 
         operator int(){
          return id;
@@ -23,7 +31,11 @@ public:
 };
 
 int main(){
-	UserId id = 5;
-	GroupId gid = 10;
-	std::cout << id + 5;
+	"12345"_uid;
+
+	UserId uid = 5_uid;
+
+//	UserId id = 5;
+//	GroupId gid = 10;
+//	std::cout << id + 5;
 }

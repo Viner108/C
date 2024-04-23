@@ -14,6 +14,7 @@ public:
 	}
 	}
 
+
 	~MyVector(){
 		delete[] data;
 	}
@@ -96,10 +97,47 @@ public:
 
 class Matrix{
 private:
-
+       size_t rows;
+       size_t columns;
+       MyVector* vectors;
 public:
+    Matrix(size_t rows, size_t columns) : rows(rows), columns(columns) {
+    
+    }
 
+    ~Matrix() {
+        delete[] vectors;
+    }
+
+    Matrix(const Matrix& other) : rows(other.rows), columns(other.columns) {
+        
+    }
+
+    Matrix& operator=(const Matrix& other) {
+        return *this;
+       }
+
+    size_t getRows() const {
+        return rows;
+    }
+
+    size_t getColumns() const {
+        return columns;
+    }
+
+    MyVector& operator[](size_t index) {
+        
+    }
+
+    const MyVector& operator[](size_t index) const {
+        
+    }
+
+    void print() const {
+
+    }
 };
+
 
 
 int main(){
@@ -118,4 +156,5 @@ int main(){
 	MyVector result2 = vector1 * vector2;
 	result2.print();
 
-}
+
+};
