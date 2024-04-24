@@ -18,8 +18,17 @@ T maximum(const T& a, const U& b){
     return a > b ? a : b;
 }
 
+template<class T>
+struct vector{
+    template < typename U>
+    void push_back(const U& x);
+};
+
 template<typename T>
-class vector{};
+template<typename U>
+void vector<T>::push_back(const U& x){
+
+}
 
 //template <typename T>
 //using mymap = std::map<T, T>;
