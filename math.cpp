@@ -59,15 +59,14 @@ public:
         return data[index];
         }
 
-        MyVector operator*(const MyVector& other) const {
+        int operator*(const MyVector& other) const {
         if (this->size() != other.size()) {
             cerr << "Error MyVector operator*" << endl;
-            return MyVector(0);
+            return 0;
         }
-
-        MyVector result(this->size());
+        int result = 0;
         for (size_t i = 0; i < this->size(); ++i) {
-            result[i] = (*this)[i] * other[i];
+            result += (*this)[i] * other[i];
         }
         return result;
         }
@@ -106,6 +105,14 @@ public:
     for (size_t i = 0; i < rows; ++i)
     {
         vectors[i] = new MyVector(columns);
+    }
+    }
+
+    Matrix(size_t rows, const MyVector& myVector) : rows(rows), columns(myVector.size()) {
+    vectors  = new MyVector*[rows];
+    for (size_t i = 0; i < rows; ++i)
+    {
+        vectors[i] = new MyVector(myVector);
     }
     }
 
@@ -167,19 +174,31 @@ public:
     return *vectors[index];
     }
 
-    Matrix operator+(const MyVector& other) const {
-    if (this->getColumns() != other.size()) {
+    Matrix operator+(const Matrix& other) const {
+    if (this->getRows() != other.rows) {
         cerr << "Error operator+ " << '\n';
         return Matrix(0, 0);
     }
-
     Matrix result(this->getRows(), this->getColumns());
     for (size_t i = 0; i < this->getRows(); ++i) {
-            result[i] = (*this)[i]+ other;
+            result[i] = (*this)[i]+ other[i];
     }
     return result;
     }
 
+
+    Matrix operator+(const MyVector& other) const {
+    if (this->getRows() != other.size()) {
+        cerr << "Error operator+ " << '\n';
+        return Matrix(0, 0);
+    }
+    Matrix vector = Matrix(other.size(),other);
+
+    Matrix result = *this + vector;
+    return result;
+    }
+
+   
     
     MyVector operator*(const MyVector& other) const {
     if (this->getColumns() != other.size()) {
@@ -220,12 +239,11 @@ int main(){
 	vector2.print();
 
 	MyVector result1 = vector1 + vector2;
-    cout << "Vector operator+ ";
+    cout << "Result of vector addition ";
 	result1.print();
 
-	MyVector result2 = vector1 * vector2;
-    cout << "Vector operator* ";
-	result2.print();
+	int result2 = vector1 * vector2;
+    cout << "Result of vector multiplication " << result2 << '\n';
 
     Matrix mat(2,2);
     cout << "Matrix 1 ";
