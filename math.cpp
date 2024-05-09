@@ -3,9 +3,13 @@
 using namespace std;
 
 class MyVector{
+
 private:
+
 	int* data;
+
 	size_t length;
+
 public:
 
 	MyVector(size_t size): length(size){
@@ -14,7 +18,6 @@ public:
 		data[i]=3;
 	}
 	}
-
 
 	~MyVector(){
 		delete[] data;
@@ -52,39 +55,39 @@ public:
 	}
 
 	const int& operator[](size_t index) const {
-        if (index >= length) {
-            cerr << "Error MyVector operator[] const" << '\n';
-            return data[0];
-        }
-        return data[index];
-        }
+    if (index >= length) {
+        cerr << "Error MyVector operator[] const" << '\n';
+        return data[0];
+    }
+    return data[index];
+    }
 
-        int operator*(const MyVector& other) const {
-        if (this->size() != other.size()) {
-            cerr << "Error MyVector operator*" << endl;
-            return 0;
-        }
-        int result = 0;
-        for (size_t i = 0; i < this->size(); ++i) {
-            result += (*this)[i] * other[i];
-        }
-        return result;
-        }
+    int operator*(const MyVector& other) const {
+    if (this->size() != other.size()) {
+        cerr << "Error MyVector operator*" << endl;
+        throw std::runtime_error("Vector dimensions do not match");
+    }
+    int result = 0;
+    for (size_t i = 0; i < this->size(); ++i) {
+        result += (*this)[i] * other[i];
+    }
+    return result;
+    }
 
-        MyVector operator+(const MyVector& other) const {
-        if (this->size() != other.size()) {
-            cerr << "Error MyVector operator+ " << endl;
-            return MyVector(0);
-        }
+    MyVector operator+(const MyVector& other) const {
+    if (this->size() != other.size()) {
+        cerr << "Error MyVector operator+ " << endl;
+        throw std::runtime_error("Vector dimensions do not match");
+    }
 
-        MyVector result(this->size());
-        for (size_t i = 0; i < this->size(); ++i) {
-            result[i] = (*this)[i] + other[i];
-        }
-        return result;
-        }
+    MyVector result(this->size());
+    for (size_t i = 0; i < this->size(); ++i) {
+        result[i] = (*this)[i] + other[i];
+    }
+    return result;
+    }
 
-        void print() const{
+    void print() const{
 	cout << "start vector ";
 	for(size_t i = 0; i < length; ++i){
 	cout << data[i] << " ";
@@ -175,9 +178,9 @@ public:
     }
 
     Matrix operator+(const Matrix& other) const {
-    if (this->getRows() != other.rows) {
+    if (this->getRows() != other.getRows()) {
         cerr << "Error operator+ " << '\n';
-        return Matrix(0, 0);
+        throw std::runtime_error("The matrix dimensions do not match");
     }
     Matrix result(this->getRows(), this->getColumns());
     for (size_t i = 0; i < this->getRows(); ++i) {
@@ -188,9 +191,9 @@ public:
 
 
     Matrix operator+(const MyVector& other) const {
-    if (this->getRows() != other.size()) {
+    if (this->getColumns() != other.size()) {
         cerr << "Error operator+ " << '\n';
-        return Matrix(0, 0);
+        throw std::runtime_error("The dimensions of the vector and matrix do not match");
     }
     Matrix vector = Matrix(other.size(),other);
 
@@ -203,7 +206,7 @@ public:
     MyVector operator*(const MyVector& other) const {
     if (this->getColumns() != other.size()) {
         cerr << "Error operator* " << '\n';
-        return MyVector(0);
+        throw std::runtime_error("The dimensions of the vector and matrix do not match");
     }
 
     MyVector result(this->getRows());
@@ -230,20 +233,24 @@ public:
 
 int main(){
 	MyVector vector1(2);
-	MyVector vector2(2);
+	MyVector vector2(3);
 	
 	cout << "Vector 1 ";
 	vector1.print();
 
 	cout << "Vector 2 ";
 	vector2.print();
-
+try {
 	MyVector result1 = vector1 + vector2;
     cout << "Result of vector addition ";
 	result1.print();
-
+} catch(const std::runtime_error& e) {
+    cerr << "Ошибка: " << e.what() << '\n';
+}
+/*
 	int result2 = vector1 * vector2;
     cout << "Result of vector multiplication " << result2 << '\n';
+
 
     Matrix mat(2,2);
     cout << "Matrix 1 ";
@@ -256,5 +263,6 @@ int main(){
     MyVector result4 = mat * vector1;
     cout << "Matrix result4 ";
     result4.print();
+*/
 
-};
+}
